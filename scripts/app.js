@@ -65,6 +65,8 @@
     lang: loadSavedLang(),
     filter: "all",
     search: "",
+    teamFilter: "all",
+    teamSearch: "",
     calendarMonth: "2026-11",
     selectedDate: "2026-11-28",
     activeSeatViewZone: "parter",
@@ -280,25 +282,86 @@
 
   function renderActors() {
     const grid = document.getElementById("actorsGrid");
-    grid.innerHTML = data.actors
+    const q = state.teamSearch.trim().toLowerCase();
+
+    const filtered = data.actors.filter((actor) => {
+      const matchesCat = state.teamFilter === "all" || actor.category === state.teamFilter;
+      const name = actor.name[state.lang].toLowerCase();
+      const title = actor.title[state.lang].toLowerCase();
+      const roles = (actor.roles[state.lang] || "").toLowerCase();
+      const matchesSearch = !q || name.includes(q) || title.includes(q) || roles.includes(q);
+      return matchesCat && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<p style="grid-column: 1 / -1; color: var(--ink-muted); text-align: center; padding: 2rem 0;">${t("teamFilters.empty")}</p>`;
+      return;
+    }
+
+    grid.innerHTML = filtered
       .map(
-        (actor) => `
-        <article class="actor-card">
-          <div class="actor-top">
-            <div class="actor-avatar" style="background: ${actor.accent};">${actor.initials}</div>
-            <div>
-              <h3 class="actor-name">${actor.name[state.lang]}</h3>
-              <div class="actor-role-title">${actor.title[state.lang]}</div>
+        (actor) => {
+          const categoryBadge = t(`teamFilters.${actor.category}`);
+          return `
+          <article class="actor-card" data-member-id="${actor.id}">
+            <div class="actor-card-badge">${categoryBadge}</div>
+            <div class="actor-top">
+              <div class="actor-avatar" style="background: ${actor.accent};">${actor.initials}</div>
+              <div>
+                <h3 class="actor-name">${actor.name[state.lang]}</h3>
+                <div class="actor-role-title">${actor.title[state.lang]}</div>
+              </div>
             </div>
-          </div>
-          <p class="actor-bio">${actor.bio[state.lang]}</p>
-          <div class="actor-meta">
-            <strong>${t("actor.keyRoles")}:</strong> ${actor.roles[state.lang]}
-          </div>
-        </article>
-      `
+            <p class="actor-bio">${actor.bio[state.lang]}</p>
+            <div class="actor-meta">
+              <strong>${t("teamMember.rolesOrWorks")}:</strong> ${actor.roles[state.lang]}
+            </div>
+            <div class="actor-card-footer">
+              <button type="button" class="btn btn-outline btn-sm" data-action="member-details" data-id="${actor.id}">
+                ${t("teamMember.detailsBtn")}
+              </button>
+            </div>
+          </article>
+        `;
+        }
       )
       .join("");
+  }
+
+  function openTeamMemberModal(memberId) {
+    const item = data.actors.find((a) => a.id === memberId);
+    if (!item) return;
+
+    const categoryBadge = t(`teamFilters.${item.category}`);
+    const awardsHtml = item.awards && item.awards[state.lang]
+      ? `<div><strong>${t("teamMember.awards")}:</strong> ${item.awards[state.lang]}</div>`
+      : "";
+
+    openModal(`
+      <div style="display:flex; align-items:center; gap:1.25rem; margin-bottom:1.25rem;">
+        <div class="actor-avatar" style="background:${item.accent}; width:72px; height:72px; font-size:1.75rem;">${item.initials}</div>
+        <div>
+          <span class="ticket-status-badge" style="margin-bottom:0.35rem; display:inline-block;">${categoryBadge}</span>
+          <h2 class="modal-title" style="margin-bottom:0.25rem;">${item.name[state.lang]}</h2>
+          <div style="font-size:0.9rem; color:var(--accent); font-weight:600;">${item.title[state.lang]}</div>
+        </div>
+      </div>
+      <div class="modal-meta-grid">
+        <div><strong>${t("teamMember.rolesOrWorks")}:</strong> ${item.roles[state.lang]}</div>
+        ${awardsHtml}
+      </div>
+      <div style="margin: 1.25rem 0;">
+        <h4 style="font-size:0.9rem; margin-bottom:0.45rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft);">
+          ${t("teamMember.detailsBtn")}
+        </h4>
+        <p style="color:var(--ink-muted); line-height:1.7; font-size:0.95rem;">${item.bio[state.lang]}</p>
+      </div>
+      <div style="display:flex; justify-content:flex-end;">
+        <button type="button" class="btn btn-primary btn-sm" id="modalMemberCloseBtn">${t("teamMember.closeBtn")}</button>
+      </div>
+    `);
+
+    document.getElementById("modalMemberCloseBtn").addEventListener("click", closeModal);
   }
 
   function renderNews() {
@@ -778,6 +841,33 @@
     document.getElementById("searchInput").addEventListener("input", (e) => {
       state.search = e.target.value;
       renderProductions();
+    });
+
+    // Team Category Filters
+    document.getElementById("teamCategoryFilters").addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-pill[data-team-filter]");
+      if (!btn) return;
+      state.teamFilter = btn.getAttribute("data-team-filter");
+      document.querySelectorAll("#teamCategoryFilters .filter-pill").forEach((p) => p.classList.remove("active"));
+      btn.classList.add("active");
+      renderActors();
+    });
+
+    // Team Search Input
+    document.getElementById("teamSearchInput").addEventListener("input", (e) => {
+      state.teamSearch = e.target.value;
+      renderActors();
+    });
+
+    // Team member details modal
+    document.getElementById("actorsGrid").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action='member-details']");
+      const card = e.target.closest(".actor-card[data-member-id]");
+      if (btn) {
+        openTeamMemberModal(btn.getAttribute("data-id"));
+      } else if (card && !e.target.closest("button")) {
+        openTeamMemberModal(card.getAttribute("data-member-id"));
+      }
     });
 
     // Calendar events

@@ -142,18 +142,34 @@
       </div>
     </section>
 
-    <!-- Actors -->
+    <!-- Creative Ensemble (Ijodiy jamoa) -->
     <section id="actors" class="section section-alt">
       <div class="container">
         <div class="section-header">
           <div>
             <span class="section-tag" data-i18n="sections.actorsTag">Ijodiy jamoa</span>
-            <h2 class="section-title" data-i18n="sections.actorsTitle">Solist-vokalistlar va aktyorlar</h2>
+            <h2 class="section-title" data-i18n="sections.actorsTitle">Teatr ijodiy jamoasi</h2>
             <p class="section-sub" data-i18n="sections.actorsSub">
-              Teatrimizning yetakchi solistlari, xalq artistlari va mahoratli ijrochilari.
+              Rahbariyat, yetakchi rejissyorlar, solist-aktyorlar, rassomlar, dirijyorlar va teatr ustalari.
             </p>
           </div>
         </div>
+
+        <div class="filter-bar">
+          <div class="filter-pills" id="teamCategoryFilters">
+            <button type="button" class="filter-pill active" data-team-filter="all" data-i18n="teamFilters.all">Barchasi</button>
+            <button type="button" class="filter-pill" data-team-filter="leadership" data-i18n="teamFilters.leadership">Rahbariyat</button>
+            <button type="button" class="filter-pill" data-team-filter="directors" data-i18n="teamFilters.directors">Rejissyorlar</button>
+            <button type="button" class="filter-pill" data-team-filter="actors" data-i18n="teamFilters.actors">Aktyorlar va Solistlar</button>
+            <button type="button" class="filter-pill" data-team-filter="designers" data-i18n="teamFilters.designers">Rassomlar</button>
+            <button type="button" class="filter-pill" data-team-filter="music" data-i18n="teamFilters.music">Dirijyor va Musiqa</button>
+            <button type="button" class="filter-pill" data-team-filter="masters" data-i18n="teamFilters.masters">Ustoz san'atkorlar</button>
+          </div>
+          <div class="search-box">
+            <input type="search" id="teamSearchInput" data-i18n-placeholder="teamFilters.searchPlaceholder" placeholder="Ijodkorni izlash..." />
+          </div>
+        </div>
+
         <div class="actors-grid" id="actorsGrid"></div>
       </div>
     </section>

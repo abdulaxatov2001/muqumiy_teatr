@@ -32,8 +32,8 @@ window.MILLIY_TEATR.translations = {
       repertoireTitle: "Teatr spektakllari",
       repertoireSub: "Musiqali dramalar, xalq komediyalari va etno-xoreografik asarlar bilan tanishing.",
       actorsTag: "Ijodiy jamoa",
-      actorsTitle: "Solist-vokalistlar va aktyorlar",
-      actorsSub: "Teatrimizning yetakchi solistlari, xalq artistlari va mahoratli ijrochilari.",
+      actorsTitle: "Teatr ijodiy jamoasi",
+      actorsSub: "Rahbariyat, yetakchi rejissyorlar, solist-aktyorlar, rassomlar, dirijyorlar va teatr ustalari.",
       newsTag: "Yangiliklar",
       newsTitle: "Teatr hayoti va tadbirlar",
       newsSub: "Rasmiy e'lonlar, xotira kechalari va hamkorlik loyihalari.",
@@ -43,6 +43,24 @@ window.MILLIY_TEATR.translations = {
       calendarTag: "Oylik jadval",
       calendarTitle: "Interaktiv repertuar kalendari",
       calendarSub: "Istalgan sanani tanlang va shu kungi spektakllarni ko'rib darhol chipta oling."
+    },
+    teamFilters: {
+      all: "Barchasi",
+      leadership: "Rahbariyat",
+      directors: "Rejissyorlar",
+      actors: "Aktyorlar va Solistlar",
+      designers: "Rassomlar",
+      music: "Dirijyor va Musiqa",
+      masters: "Ustoz san'atkorlar",
+      searchPlaceholder: "Ijodkorni ismi yoki sohasi bo'yicha izlash...",
+      empty: "Tanlangan mezonlar bo'yicha ijodkorlar topilmadi."
+    },
+    teamMember: {
+      category: "Soha",
+      rolesOrWorks: "Asosiy ishlari va rollari",
+      awards: "Mukofotlari",
+      detailsBtn: "Batafsil ma'lumot",
+      closeBtn: "Yopish"
     },
     calendar: {
       weekdays: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"],
@@ -197,8 +215,8 @@ window.MILLIY_TEATR.translations = {
       repertoireTitle: "Спектакли театра",
       repertoireSub: "Познакомьтесь с музыкальными драмами, комедиями и этно-хореографическими поэмами.",
       actorsTag: "Творческий коллектив",
-      actorsTitle: "Солисты-вокалисты и актёры",
-      actorsSub: "Ведущие солисты, народные артисты и мастера сцены театра Мукими.",
+      actorsTitle: "Творческий состав театра",
+      actorsSub: "Руководство, ведущие режиссёры, солисты-вокалисты, художники, дирижёры и легендарные мастера сцены.",
       newsTag: "Новости",
       newsTitle: "Жизнь театра и события",
       newsSub: "Официальные объявления, творческие вечера и культурные проекты.",
@@ -208,6 +226,24 @@ window.MILLIY_TEATR.translations = {
       calendarTag: "Расписание на месяц",
       calendarTitle: "Интерактивный календарь репертуара",
       calendarSub: "Нажмите на любую дату, чтобы увидеть спектакли и сразу перейти к выбору мест."
+    },
+    teamFilters: {
+      all: "Все",
+      leadership: "Руководство",
+      directors: "Режиссёры",
+      actors: "Актёры и Солисты",
+      designers: "Художники",
+      music: "Дирижёры и Музыка",
+      masters: "Мастера сцены",
+      searchPlaceholder: "Поиск по имени или направлению...",
+      empty: "По выбранным параметрам деятели театра не найдены."
+    },
+    teamMember: {
+      category: "Направление",
+      rolesOrWorks: "Основные работы и роли",
+      awards: "Награды и звания",
+      detailsBtn: "Подробнее",
+      closeBtn: "Закрыть"
     },
     calendar: {
       weekdays: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
@@ -362,8 +398,8 @@ window.MILLIY_TEATR.translations = {
       repertoireTitle: "Theater Productions",
       repertoireSub: "Explore our musical dramas, comedies, and ethno-choreographic poems.",
       actorsTag: "Creative Troupe",
-      actorsTitle: "Soloist Vocalists & Actors",
-      actorsSub: "Leading soloists, People's Artists, and acclaimed performers of Muqimiy Theater.",
+      actorsTitle: "Theater Creative Ensemble",
+      actorsSub: "Leadership, stage directors, soloists, set designers, conductors, and legendary masters.",
       newsTag: "News",
       newsTitle: "Theater Life & Events",
       newsSub: "Official announcements, literary evenings, and cultural collaborations.",
@@ -373,6 +409,24 @@ window.MILLIY_TEATR.translations = {
       calendarTag: "Monthly Schedule",
       calendarTitle: "Interactive Repertoire Calendar",
       calendarSub: "Click any date to inspect scheduled performances and jump straight to seat selection."
+    },
+    teamFilters: {
+      all: "All",
+      leadership: "Directorate",
+      directors: "Directors",
+      actors: "Actors & Soloists",
+      designers: "Designers & Artists",
+      music: "Conductors & Music",
+      masters: "Historic Masters",
+      searchPlaceholder: "Search by name or specialty...",
+      empty: "No ensemble members match your search criteria."
+    },
+    teamMember: {
+      category: "Specialty",
+      rolesOrWorks: "Key Productions & Roles",
+      awards: "Honors & Awards",
+      detailsBtn: "View Biography",
+      closeBtn: "Close"
     },
     calendar: {
       weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
