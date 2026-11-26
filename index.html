@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muqimiy Teatri — O'zbekiston davlat akademik musiqali teatri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand">
+        <div class="brand-mark">M</div>
+        <div class="brand-text">
+          <strong data-i18n="brand.name">Muqimiy Teatri</strong>
+          <span data-i18n="brand.subtitle">Muqimiy nomidagi O'zbekiston davlat akademik musiqali teatri</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" data-i18n="nav.home">Bosh sahifa</a>
+        <a href="#repertoire" data-i18n="nav.repertoire">Repertuar</a>
+        <a href="#actors" data-i18n="nav.actors">Ijodiy jamoa</a>
+        <a href="#news" data-i18n="nav.news">Yangiliklar</a>
+        <a href="#booking" data-i18n="nav.tickets">Chiptalar</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-switcher" role="group" aria-label="Language switcher">
+          <button type="button" class="lang-btn active" data-lang="uz">UZ</button>
+          <button type="button" class="lang-btn" data-lang="ru">RU</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <a href="#booking" class="btn btn-primary btn-sm" data-i18n="nav.buyTicket">Chipta olish</a>
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="hero-badge" data-i18n="hero.badge">1939-yildan buyon · Musiqali sahna san'ati</span>
+          <h1 class="hero-title" data-i18n="hero.title">Musiqa, drama va milliy ruhiyat uyg'unligi</h1>
+          <p class="hero-desc" data-i18n="hero.desc">
+            Muqimiy nomidagi O'zbekiston davlat akademik musiqali teatri — o'lmas musiqali dramalar, xalq komediyalari va zamonaviy sahna asarlari maskani.
+          </p>
+          <div class="hero-cta">
+            <a href="#repertoire" class="btn btn-primary" data-i18n="hero.ctaPrimary">Noyabr repertuari</a>
+            <a href="#booking" class="btn btn-outline" data-i18n="hero.ctaSecondary">Zaldan joy tanlash</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <strong>1939</strong>
+              <span data-i18n="hero.statsSeason">Tashkil topgan yil</span>
+            </div>
+            <div class="stat-item">
+              <strong>25+</strong>
+              <span data-i18n="hero.statsShows">Repertuar asarlari</span>
+            </div>
+            <div class="stat-item">
+              <strong>80+</strong>
+              <span data-i18n="hero.statsActors">Ijodiy xodimlar</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-image-frame">
+            <img src="images/hero-theater.jpg" alt="Muqimiy Teatri" />
+          </div>
+          <div class="hero-floating-card">
+            <div class="label" data-i18n="hero.nextPremiere">Yaqinlashayotgan spektakl</div>
+            <h4 id="heroPremiereTitle">Baxshi</h4>
+            <p id="heroPremiereMeta">28 Noyabr, 18:00 · Asosiy zal</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Repertoire -->
+    <section id="repertoire" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="sections.repertoireTag">Repertuar va afisha</span>
+            <h2 class="section-title" data-i18n="sections.repertoireTitle">Teatr spektakllari</h2>
+            <p class="section-sub" data-i18n="sections.repertoireSub">
+              Musiqali dramalar, xalq komediyalari va etno-xoreografik asarlar bilan tanishing.
+            </p>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-pills" id="genreFilters">
+            <button type="button" class="filter-pill active" data-filter="all" data-i18n="filters.all">Barchasi</button>
+            <button type="button" class="filter-pill" data-filter="drama" data-i18n="filters.drama">Musiqali drama</button>
+            <button type="button" class="filter-pill" data-filter="comedy" data-i18n="filters.comedy">Komediya</button>
+            <button type="button" class="filter-pill" data-filter="classic" data-i18n="filters.classic">Klassika</button>
+            <button type="button" class="filter-pill" data-filter="etno" data-i18n="filters.etno">Etno-poema</button>
+          </div>
+          <div class="search-box">
+            <input type="search" id="searchInput" data-i18n-placeholder="filters.searchPlaceholder" placeholder="Spektakl yoki muallif izlash..." />
+          </div>
+        </div>
+
+        <div class="cards-grid" id="productionsGrid"></div>
+      </div>
+    </section>
+
+    <!-- Actors -->
+    <section id="actors" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="sections.actorsTag">Ijodiy jamoa</span>
+            <h2 class="section-title" data-i18n="sections.actorsTitle">Solist-vokalistlar va aktyorlar</h2>
+            <p class="section-sub" data-i18n="sections.actorsSub">
+              Teatrimizning yetakchi solistlari, xalq artistlari va mahoratli ijrochilari.
+            </p>
+          </div>
+        </div>
+        <div class="actors-grid" id="actorsGrid"></div>
+      </div>
+    </section>
+
+    <!-- News -->
+    <section id="news" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="sections.newsTag">Yangiliklar</span>
+            <h2 class="section-title" data-i18n="sections.newsTitle">Teatr hayoti va tadbirlar</h2>
+            <p class="section-sub" data-i18n="sections.newsSub">
+              Rasmiy e'lonlar, xotira kechalari va hamkorlik loyihalari.
+            </p>
+          </div>
+        </div>
+        <div class="news-grid" id="newsGrid"></div>
+      </div>
+    </section>
+
+    <!-- Interactive Booking (Official Muqimiy Seating Chart) -->
+    <section id="booking" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="sections.bookingTag">Onlayn kassa</span>
+            <h2 class="section-title" data-i18n="sections.bookingTitle">Tomoshabinlar zali sxemasi va bron</h2>
+            <p class="section-sub" data-i18n="sections.bookingSub">
+              Muqimiy teatrining rasmiy zal sxemasidan o'zingizga qulay o'rinni tanlang.
+            </p>
+          </div>
+        </div>
+
+        <div class="booking-layout">
+          <div class="seat-map-panel">
+            <div class="booking-controls">
+              <div class="field-group">
+                <label for="bookingShowSelect" data-i18n="booking.selectShow">Spektaklni tanlang</label>
+                <select id="bookingShowSelect"></select>
+              </div>
+              <div class="field-group">
+                <label for="bookingSessionSelect" data-i18n="booking.selectSession">Sana va vaqtni tanlang</label>
+                <select id="bookingSessionSelect"></select>
+              </div>
+            </div>
+
+            <div class="hall-zones" id="hallZones"></div>
+
+            <div class="stage-arc">
+              <div class="stage-bar"></div>
+              <span class="stage-label" data-i18n="booking.stage">SAHNA</span>
+            </div>
+
+            <div class="seat-legend">
+              <div class="legend-item">
+                <span class="legend-dot"></span>
+                <span data-i18n="booking.legendAvailable">Bo'sh</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot vip"></span>
+                <span data-i18n="booking.legendVip">Balkon / VIP</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot selected"></span>
+                <span data-i18n="booking.legendSelected">Tanlangan</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot occupied"></span>
+                <span data-i18n="booking.legendOccupied">Band</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="summary-panel">
+            <h3 data-i18n="booking.selectedSeats">Tanlangan joylar</h3>
+            <div id="selectedSeatsList" class="selected-seats-list"></div>
+
+            <div class="summary-total">
+              <span data-i18n="booking.total">Jami summa</span>
+              <strong id="bookingTotal">0 so'm</strong>
+            </div>
+
+            <form id="bookingForm" class="booking-form" novalidate>
+              <div class="field-group">
+                <label for="customerName" data-i18n="booking.fullName">Ism va familiya</label>
+                <input type="text" id="customerName" data-i18n-placeholder="booking.fullNamePh" placeholder="Masalan: Azizbek Karimov" required />
+              </div>
+              <div class="field-group">
+                <label for="customerPhone" data-i18n="booking.phone">Telefon raqami</label>
+                <input type="tel" id="customerPhone" data-i18n-placeholder="booking.phonePh" placeholder="+998 90 123 45 67" required />
+              </div>
+              <div class="field-group">
+                <label for="customerEmail" data-i18n="booking.email">Elektron pochta (ixtiyoriy)</label>
+                <input type="email" id="customerEmail" data-i18n-placeholder="booking.emailPh" placeholder="email@example.com" />
+              </div>
+              <div id="bookingError" class="form-error" data-i18n="booking.validationError">
+                Iltimos, kamida bitta joy tanlang hamda ism va telefon raqamingizni kiriting.
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-i18n="booking.confirmBtn">Chiptalarni bron qilish</button>
+                <button type="button" id="clearSeatsBtn" class="btn btn-outline btn-sm" data-i18n="booking.clearBtn">Tozalash</button>
+              </div>
+            </form>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand" style="margin-bottom: 0.75rem;">
+            <div class="brand-mark">M</div>
+            <div class="brand-text">
+              <strong data-i18n="brand.name">Muqimiy Teatri</strong>
+            </div>
+          </div>
+          <p data-i18n="footer.about">
+            Muqimiy nomidagi O'zbekiston davlat akademik musiqali teatri. 1939-yildan buyon milliy musiqali drama va komediya san'atini rivojlantirib kelmoqda.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.addressTitle">Manzil va mo'ljal</h4>
+          <p data-i18n="footer.address">Toshkent sh., Chilonzor tumani, Mahmudjon G'ofurov ko'chasi, 187-uy (Metro: Xalqlar do'stligi, Mo'ljal: Milliy bog')</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.hoursTitle">Ish tartibi</h4>
+          <p data-i18n="footer.hours" style="white-space: pre-line;">Dushanba — Yakshanba: 10:00 — 19:30
+Dam olish kuni: Seshanba</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.contactTitle">Aloqa</h4>
+          <p>
+            (+998) 71-245-16-33<br />
+            (+998) 90-959-34-56<br />
+            info@muqimiyteatr.uz<br />
+            <a href="https://t.me/Muqimiyteatruz" target="_blank" rel="noopener">Telegram</a> ·
+            <a href="https://instagram.com/muqimiyteatruz" target="_blank" rel="noopener">Instagram</a>
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom" data-i18n="footer.copyright">
+        © 2026 Muqimiy nomidagi O'zbekiston davlat akademik musiqali teatri. Barcha huquqlar himoyalangan.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Detail / Success Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="scripts/i18n.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
