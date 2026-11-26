@@ -37,6 +37,7 @@
       const parsed = raw ? JSON.parse(raw) : [];
       return Array.isArray(parsed) ? parsed : [];
     } catch {
+
       return [];
     }
   }
