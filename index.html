@@ -27,6 +27,7 @@
         <a href="#actors" data-i18n="nav.actors">Ijodiy jamoa</a>
         <a href="#news" data-i18n="nav.news">Yangiliklar</a>
         <a href="#booking" data-i18n="nav.tickets">Chiptalar</a>
+        <a href="#contact" data-i18n="nav.contact">Manzil</a>
         <a href="#my-tickets" data-i18n="nav.myTickets">Mening chiptalarim</a>
       </nav>
 
@@ -293,6 +294,96 @@
                 </div>
               </form>
             </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Map / Contact -->
+    <section id="contact" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="sections.contactTag">Manzil va yo'nalish</span>
+            <h2 class="section-title" data-i18n="sections.contactTitle">Teatrga qanday yetib kelish</h2>
+            <p class="section-sub" data-i18n="sections.contactSub">
+              Toshkent sh., Chilonzor tumani, Mahmudjon G'ofurov ko'chasi, 187-uy. Metro: Xalqlar do'stligi. Mo'ljal: Milliy bog'.
+            </p>
+          </div>
+        </div>
+
+        <div class="map-contact-layout">
+          <div class="map-section">
+            <div class="map-tabs-row">
+              <div class="map-tab-pills" id="mapTabPills">
+                <button type="button" class="filter-pill active" data-map="google">Google Maps</button>
+                <button type="button" class="filter-pill" data-map="yandex">Yandex Maps</button>
+              </div>
+              <a class="map-ext-link" id="mapExtLink" href="https://maps.app.goo.gl/iPkUKok2j26iauxs9" target="_blank" rel="noopener" data-i18n="contact.openInApp">Ilovada ochish ↗</a>
+            </div>
+            <div class="map-frame-wrap">
+              <iframe
+                id="googleMapFrame"
+                class="map-iframe active"
+                src="https://maps.google.com/maps?q=41.2994,69.2351&z=17&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Google Maps — Muqimiy Teatri"
+              ></iframe>
+              <iframe
+                id="yandexMapFrame"
+                class="map-iframe"
+                src="https://yandex.uz/map-widget/v1/?ll=69.2351%2C41.2994&z=17&pt=69.2351,41.2994,pm2rdm&l=map"
+                loading="lazy"
+                title="Yandex Maps — Muqimiy Teatri"
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="contact-info-panel">
+            <div class="contact-info-block">
+              <div class="contact-info-icon">📍</div>
+              <div>
+                <strong data-i18n="footer.addressTitle">Manzil</strong>
+                <p data-i18n="footer.address">Toshkent sh., Chilonzor tumani, Mahmudjon G'ofurov ko'chasi, 187-uy (Metro: Xalqlar do'stligi)</p>
+              </div>
+            </div>
+            <div class="contact-info-block">
+              <div class="contact-info-icon">🕐</div>
+              <div>
+                <strong data-i18n="footer.hoursTitle">Ish tartibi</strong>
+                <p data-i18n="footer.hours" style="white-space: pre-line;">Dushanba — Yakshanba: 10:00 — 19:30
+Dam olish kuni: Seshanba</p>
+              </div>
+            </div>
+            <div class="contact-info-block">
+              <div class="contact-info-icon">📞</div>
+              <div>
+                <strong data-i18n="footer.contactTitle">Aloqa</strong>
+                <p>
+                  (+998) 71-245-16-33<br />
+                  (+998) 90-959-34-56<br />
+                  info@muqimiyteatr.uz
+                </p>
+              </div>
+            </div>
+            <div class="contact-info-block">
+              <div class="contact-info-icon">🗺️</div>
+              <div>
+                <strong data-i18n="contact.openWith">Xaritada ochish</strong>
+                <div class="contact-map-links">
+                  <a href="https://maps.app.goo.gl/iPkUKok2j26iauxs9" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Google Maps ↗</a>
+                  <a href="https://yandex.uz/maps/-/CXgR5Bkt" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Yandex Maps ↗</a>
+                </div>
+              </div>
+            </div>
+            <div class="contact-info-block">
+              <div class="contact-info-icon">🚇</div>
+              <div>
+                <strong data-i18n="contact.metroLabel">Metro</strong>
+                <p data-i18n="contact.metroValue">Xalqlar do'stligi stansiyasi (2–3 daqiqa piyoda). Mo'ljal: Milliy bog' va Xalqlar do'stligi maydoni.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

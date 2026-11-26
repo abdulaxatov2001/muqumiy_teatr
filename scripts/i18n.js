@@ -13,6 +13,7 @@ window.MILLIY_TEATR.translations = {
       actors: "Ijodiy jamoa",
       news: "Yangiliklar",
       tickets: "Chiptalar",
+      contact: "Manzil",
       myTickets: "Mening chiptalarim",
       buyTicket: "Chipta olish"
     },
@@ -42,7 +43,10 @@ window.MILLIY_TEATR.translations = {
       bookingSub: "Muqimiy teatrining rasmiy zal sxemasidan o'zingizga qulay o'rinni tanlang.",
       calendarTag: "Oylik jadval",
       calendarTitle: "Interaktiv repertuar kalendari",
-      calendarSub: "Istalgan sanani tanlang va shu kungi spektakllarni ko'rib darhol chipta oling."
+      calendarSub: "Istalgan sanani tanlang va shu kungi spektakllarni ko'rib darhol chipta oling.",
+      contactTag: "Manzil va yo'nalish",
+      contactTitle: "Teatrga qanday yetib kelish",
+      contactSub: "Toshkent sh., Chilonzor tumani, Mahmudjon G'ofurov ko'chasi, 187-uy. Metro: Xalqlar do'stligi."
     },
     teamFilters: {
       all: "Barchasi",
@@ -174,6 +178,12 @@ window.MILLIY_TEATR.translations = {
       close: "Yopish",
       validationError: "Iltimos, kamida bitta joy tanlang hamda ism va telefon raqamingizni kiriting."
     },
+    contact: {
+      openInApp: "Ilovada ochish ↗",
+      openWith: "Xaritada ochish",
+      metroLabel: "Metro yo'li",
+      metroValue: "Xalqlar do'stligi stansiyasi (2–3 daqiqa piyoda). Mo'ljal: Milliy bog' va Xalqlar do'stligi maydoni."
+    },
     footer: {
       about: "Muqimiy nomidagi O'zbekiston davlat akademik musiqali teatri. 1939-yildan buyon milliy musiqali drama va komediya san'atini rivojlantirib kelmoqda.",
       addressTitle: "Manzil va mo'ljal",
@@ -196,6 +206,7 @@ window.MILLIY_TEATR.translations = {
       actors: "Труппа",
       news: "Новости",
       tickets: "Билеты",
+      contact: "Адрес",
       myTickets: "Мои билеты",
       buyTicket: "Купить билет"
     },
@@ -225,7 +236,10 @@ window.MILLIY_TEATR.translations = {
       bookingSub: "Выберите удобные места по официальной схеме зала театра Мукими.",
       calendarTag: "Расписание на месяц",
       calendarTitle: "Интерактивный календарь репертуара",
-      calendarSub: "Нажмите на любую дату, чтобы увидеть спектакли и сразу перейти к выбору мест."
+      calendarSub: "Нажмите на любую дату, чтобы увидеть спектакли и сразу перейти к выбору мест.",
+      contactTag: "Адрес и маршрут",
+      contactTitle: "Как добраться до театра",
+      contactSub: "г. Ташкент, Чиланзарский р-н, ул. Махмуджона Гафурова, 187. Метро: Дружба Народов."
     },
     teamFilters: {
       all: "Все",
@@ -357,6 +371,18 @@ window.MILLIY_TEATR.translations = {
       close: "Закрыть",
       validationError: "Пожалуйста, выберите хотя бы одно место и укажите имя с телефоном."
     },
+    contact: {
+      openInApp: "Ilovada ochish ↗",
+      openWith: "Xaritada ochish",
+      metroLabel: "Metro yo'li",
+      metroValue: "Xalqlar do'stligi stansiyasi (2–3 daqiqa piyoda). Mo'ljal: Milliy bog' va Xalqlar do'stligi maydoni."
+    },
+    contact: {
+      openInApp: "Открыть в приложении ↗",
+      openWith: "Открыть на карте",
+      metroLabel: "Метро",
+      metroValue: "Станция «Дружба Народов» (2–3 минуты пешком). Ориентир: Национальный парк."
+    },
     footer: {
       about: "Узбекский государственный академический музыкальный театр имени Мукими. С 1939 года развивает традиции музыкальной драмы и комедии.",
       addressTitle: "Адрес и ориентир",
@@ -379,6 +405,7 @@ window.MILLIY_TEATR.translations = {
       actors: "Troupe",
       news: "News",
       tickets: "Tickets",
+      contact: "Location",
       myTickets: "My Tickets",
       buyTicket: "Get Tickets"
     },
@@ -408,7 +435,10 @@ window.MILLIY_TEATR.translations = {
       bookingSub: "Pick your preferred seats directly from the official Muqimiy Theater seating layout.",
       calendarTag: "Monthly Schedule",
       calendarTitle: "Interactive Repertoire Calendar",
-      calendarSub: "Click any date to inspect scheduled performances and jump straight to seat selection."
+      calendarSub: "Click any date to inspect scheduled performances and jump straight to seat selection.",
+      contactTag: "Location & Directions",
+      contactTitle: "How to Get to the Theater",
+      contactSub: "187 Mahmudjon Gofurov St., Chilonzor, Tashkent. Metro: Xalqlar Do'stligi."
     },
     teamFilters: {
       all: "All",
@@ -539,6 +569,18 @@ window.MILLIY_TEATR.translations = {
       qrHint: "Show this QR code to the theater usher at entry",
       close: "Close",
       validationError: "Please select at least one seat and enter your name and phone number."
+    },
+    contact: {
+      openInApp: "Ilovada ochish ↗",
+      openWith: "Xaritada ochish",
+      metroLabel: "Metro yo'li",
+      metroValue: "Xalqlar do'stligi stansiyasi (2–3 daqiqa piyoda). Mo'ljal: Milliy bog' va Xalqlar do'stligi maydoni."
+    },
+    contact: {
+      openInApp: "Open in App ↗",
+      openWith: "Open on Map",
+      metroLabel: "By Metro",
+      metroValue: "Xalqlar Do'stligi station (2–3 min walk). Landmark: National Park."
     },
     footer: {
       about: "Muqimiy Uzbek State Academic Musical Theater. Advancing musical drama and comedy since 1939.",

@@ -288,7 +288,7 @@
       const matchesCat = state.teamFilter === "all" || actor.category === state.teamFilter;
       const name = actor.name[state.lang].toLowerCase();
       const title = actor.title[state.lang].toLowerCase();
-      const roles = (actor.roles[state.lang] || "").toLowerCase();
+      const roles = (actor.roles && actor.roles[state.lang] ? actor.roles[state.lang] : "").toLowerCase();
       const matchesSearch = !q || name.includes(q) || title.includes(q) || roles.includes(q);
       return matchesCat && matchesSearch;
     });
@@ -1073,6 +1073,24 @@
         renderMyTickets();
       }
     });
+
+    // Map tab switching
+    const mapTabPills = document.getElementById("mapTabPills");
+    if (mapTabPills) {
+      const googleExtLinks = { google: "https://maps.app.goo.gl/iPkUKok2j26iauxs9", yandex: "https://yandex.uz/maps/-/CXgR5Bkt" };
+      mapTabPills.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-map]");
+        if (!btn) return;
+        const mapType = btn.getAttribute("data-map");
+        document.querySelectorAll("#mapTabPills .filter-pill").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".map-iframe").forEach((f) => f.classList.remove("active"));
+        const frame = document.getElementById(mapType + "MapFrame");
+        if (frame) frame.classList.add("active");
+        const extLink = document.getElementById("mapExtLink");
+        if (extLink) extLink.href = googleExtLinks[mapType] || googleExtLinks.google;
+      });
+    }
 
     document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
     document.getElementById("modalBackdrop").addEventListener("click", (e) => {
