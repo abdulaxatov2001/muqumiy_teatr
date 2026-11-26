@@ -339,8 +339,8 @@
       : "";
 
     openModal(`
-      <div style="display:flex; align-items:center; gap:1.25rem; margin-bottom:1.25rem;">
-        <div class="actor-avatar" style="background:${item.accent}; width:72px; height:72px; font-size:1.75rem;">${item.initials}</div>
+      <div class="modal-member-head">
+        <div class="actor-avatar" style="background:${item.accent}; width:72px; height:72px; font-size:1.75rem; flex-shrink:0;">${item.initials}</div>
         <div>
           <span class="ticket-status-badge" style="margin-bottom:0.35rem; display:inline-block;">${categoryBadge}</span>
           <h2 class="modal-title" style="margin-bottom:0.25rem;">${item.name[state.lang]}</h2>
@@ -736,12 +736,15 @@
     document.getElementById("modalContent").innerHTML = html;
     backdrop.classList.add("open");
     backdrop.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    backdrop.querySelector(".modal-card").scrollTop = 0;
   }
 
   function closeModal() {
     const backdrop = document.getElementById("modalBackdrop");
     backdrop.classList.remove("open");
     backdrop.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
   }
 
   function openProductionModal(prodId) {
