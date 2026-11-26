@@ -23,9 +23,11 @@
       <nav class="nav-links" id="navLinks">
         <a href="#home" data-i18n="nav.home">Bosh sahifa</a>
         <a href="#repertoire" data-i18n="nav.repertoire">Repertuar</a>
+        <a href="#calendar" data-i18n="nav.calendar">Kalendar</a>
         <a href="#actors" data-i18n="nav.actors">Ijodiy jamoa</a>
         <a href="#news" data-i18n="nav.news">Yangiliklar</a>
         <a href="#booking" data-i18n="nav.tickets">Chiptalar</a>
+        <a href="#my-tickets" data-i18n="nav.myTickets">Mening chiptalarim</a>
       </nav>
 
       <div class="header-actions">
@@ -113,8 +115,35 @@
       </div>
     </section>
 
+    <!-- Interactive Monthly Calendar -->
+    <section id="calendar" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="sections.calendarTag">Oylik jadval</span>
+            <h2 class="section-title" data-i18n="sections.calendarTitle">Interaktiv repertuar kalendari</h2>
+            <p class="section-sub" data-i18n="sections.calendarSub">
+              Istalgan sanani tanlang va shu kungi spektakllarni ko'rib darhol chipta oling.
+            </p>
+          </div>
+          <div class="calendar-month-switcher" id="calendarMonthSwitcher">
+            <button type="button" class="filter-pill active" data-month="2026-11">Noyabr 2026</button>
+            <button type="button" class="filter-pill" data-month="2026-12">Dekabr 2026</button>
+          </div>
+        </div>
+
+        <div class="calendar-layout">
+          <div class="calendar-card">
+            <div class="calendar-weekdays" id="calendarWeekdays"></div>
+            <div class="calendar-days" id="calendarDays"></div>
+          </div>
+          <aside class="calendar-detail" id="calendarDetail"></aside>
+        </div>
+      </div>
+    </section>
+
     <!-- Actors -->
-    <section id="actors" class="section">
+    <section id="actors" class="section section-alt">
       <div class="container">
         <div class="section-header">
           <div>
@@ -130,7 +159,7 @@
     </section>
 
     <!-- News -->
-    <section id="news" class="section section-alt">
+    <section id="news" class="section">
       <div class="container">
         <div class="section-header">
           <div>
@@ -146,7 +175,7 @@
     </section>
 
     <!-- Interactive Booking (Official Muqimiy Seating Chart) -->
-    <section id="booking" class="section">
+    <section id="booking" class="section section-alt">
       <div class="container">
         <div class="section-header">
           <div>
@@ -198,38 +227,81 @@
             </div>
           </div>
 
-          <aside class="summary-panel">
-            <h3 data-i18n="booking.selectedSeats">Tanlangan joylar</h3>
-            <div id="selectedSeatsList" class="selected-seats-list"></div>
-
-            <div class="summary-total">
-              <span data-i18n="booking.total">Jami summa</span>
-              <strong id="bookingTotal">0 so'm</strong>
+          <div class="booking-sidebar">
+            <!-- View from Seat -->
+            <div class="seat-view-card" id="seatViewCard">
+              <div class="seat-view-header">
+                <div>
+                  <span class="seat-view-eyebrow" data-i18n="seatView.title">O'rindan sahnaga ko'rinish</span>
+                  <h3 id="seatViewZoneName">Parter (1–6 qatorlar)</h3>
+                </div>
+                <div class="seat-view-tabs" id="seatViewTabs">
+                  <button type="button" class="sv-tab active" data-zone="parter">Parter</button>
+                  <button type="button" class="sv-tab" data-zone="amphitheater">Amfiteatr</button>
+                  <button type="button" class="sv-tab" data-zone="balcony">Balkon</button>
+                </div>
+              </div>
+              <div class="seat-view-stage-wrap" id="seatViewSvgWrap"></div>
+              <p class="seat-view-desc" id="seatViewDesc"></p>
+              <div class="seat-view-metrics" id="seatViewMetrics"></div>
             </div>
 
-            <form id="bookingForm" class="booking-form" novalidate>
-              <div class="field-group">
-                <label for="customerName" data-i18n="booking.fullName">Ism va familiya</label>
-                <input type="text" id="customerName" data-i18n-placeholder="booking.fullNamePh" placeholder="Masalan: Azizbek Karimov" required />
+            <aside class="summary-panel">
+              <h3 data-i18n="booking.selectedSeats">Tanlangan joylar</h3>
+              <div id="selectedSeatsList" class="selected-seats-list"></div>
+
+              <div class="summary-total">
+                <span data-i18n="booking.total">Jami summa</span>
+                <strong id="bookingTotal">0 so'm</strong>
               </div>
-              <div class="field-group">
-                <label for="customerPhone" data-i18n="booking.phone">Telefon raqami</label>
-                <input type="tel" id="customerPhone" data-i18n-placeholder="booking.phonePh" placeholder="+998 90 123 45 67" required />
-              </div>
-              <div class="field-group">
-                <label for="customerEmail" data-i18n="booking.email">Elektron pochta (ixtiyoriy)</label>
-                <input type="email" id="customerEmail" data-i18n-placeholder="booking.emailPh" placeholder="email@example.com" />
-              </div>
-              <div id="bookingError" class="form-error" data-i18n="booking.validationError">
-                Iltimos, kamida bitta joy tanlang hamda ism va telefon raqamingizni kiriting.
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary" data-i18n="booking.confirmBtn">Chiptalarni bron qilish</button>
-                <button type="button" id="clearSeatsBtn" class="btn btn-outline btn-sm" data-i18n="booking.clearBtn">Tozalash</button>
-              </div>
-            </form>
-          </aside>
+
+              <form id="bookingForm" class="booking-form" novalidate>
+                <div class="field-group">
+                  <label for="customerName" data-i18n="booking.fullName">Ism va familiya</label>
+                  <input type="text" id="customerName" data-i18n-placeholder="booking.fullNamePh" placeholder="Masalan: Azizbek Karimov" required />
+                </div>
+                <div class="field-group">
+                  <label for="customerPhone" data-i18n="booking.phone">Telefon raqami</label>
+                  <input type="tel" id="customerPhone" data-i18n-placeholder="booking.phonePh" placeholder="+998 90 123 45 67" required />
+                </div>
+                <div class="field-group">
+                  <label for="customerEmail" data-i18n="booking.email">Elektron pochta (ixtiyoriy)</label>
+                  <input type="email" id="customerEmail" data-i18n-placeholder="booking.emailPh" placeholder="email@example.com" />
+                </div>
+                <div id="bookingError" class="form-error" data-i18n="booking.validationError">
+                  Iltimos, kamida bitta joy tanlang hamda ism va telefon raqamingizni kiriting.
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary" data-i18n="booking.confirmBtn">Chiptalarni bron qilish</button>
+                  <button type="button" id="clearSeatsBtn" class="btn btn-outline btn-sm" data-i18n="booking.clearBtn">Tozalash</button>
+                </div>
+              </form>
+            </aside>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- My Tickets -->
+    <section id="my-tickets" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-tag" data-i18n="nav.tickets">Chiptalar</span>
+            <h2 class="section-title" data-i18n="myTickets.title">Mening chiptalarim</h2>
+            <p class="section-sub" data-i18n="myTickets.subtitle">
+              Bron kodi (masalan, MQ-123456) yoki telefon raqamingiz orqali elektron chiptalaringizni toping.
+            </p>
+          </div>
+        </div>
+
+        <form id="ticketSearchForm" class="tickets-search-bar">
+          <input type="search" id="ticketSearchInput" data-i18n-placeholder="myTickets.searchPlaceholder" placeholder="Bron kodi yoki telefon raqami..." />
+          <button type="submit" class="btn btn-primary btn-sm" data-i18n="myTickets.searchBtn">Qidirish</button>
+          <button type="button" id="ticketShowAllBtn" class="btn btn-outline btn-sm" data-i18n="myTickets.showAllBtn">Barchasi</button>
+        </form>
+
+        <div class="tickets-grid" id="myTicketsGrid"></div>
       </div>
     </section>
   </main>
@@ -284,6 +356,7 @@ Dam olish kuni: Seshanba</p>
 
   <script src="scripts/i18n.js"></script>
   <script src="scripts/data.js"></script>
+  <script src="scripts/qrcode.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>

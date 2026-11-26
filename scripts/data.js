@@ -385,6 +385,42 @@ window.MILLIY_TEATR.data = {
     }
   ],
 
+  calendarSchedule: {
+    "2026-11-01": [{ showId: "qaynona", times: ["17:00", "19:00"] }],
+    "2026-11-02": [{ showId: "usmon-nosir", times: ["18:00"] }],
+    "2026-11-04": [{ showId: "otabek-va-kumushbibi", times: ["18:00"] }],
+    "2026-11-05": [{ showId: "qaytar-dunyo", times: ["18:00"] }],
+    "2026-11-06": [{ showId: "qaynona", times: ["18:00"] }],
+    "2026-11-07": [{ showId: "qaytar-dunyo", times: ["17:00", "19:00"] }],
+    "2026-11-08": [{ showId: "qaynona", times: ["17:00", "19:00"] }],
+    "2026-11-09": [{ showId: "baxshi", times: ["18:00"] }],
+    "2026-11-11": [{ showId: "qaytar-dunyo", times: ["18:00"] }],
+    "2026-11-12": [{ showId: "xumoy", times: ["18:00"] }],
+    "2026-11-13": [{ showId: "otabek-va-kumushbibi", times: ["18:00"] }],
+    "2026-11-14": [{ showId: "qaytar-dunyo", times: ["17:00", "19:00"] }],
+    "2026-11-15": [{ showId: "qaynona", times: ["17:00", "19:00"] }],
+    "2026-11-16": [{ showId: "usmon-nosir", times: ["18:00"] }],
+    "2026-11-18": [{ showId: "baxshi", times: ["18:00"] }],
+    "2026-11-20": [{ showId: "xumoy", times: ["18:00"] }],
+    "2026-11-21": [{ showId: "qaynona", times: ["17:00", "19:00"] }],
+    "2026-11-22": [{ showId: "otabek-va-kumushbibi", times: ["17:00", "19:00"] }],
+    "2026-11-25": [{ showId: "usmon-nosir", times: ["18:00"] }],
+    "2026-11-27": [{ showId: "xumoy", times: ["18:00"] }],
+    "2026-11-28": [{ showId: "baxshi", times: ["18:00"] }],
+    "2026-11-29": [{ showId: "otabek-va-kumushbibi", times: ["18:00"] }],
+    "2026-11-30": [{ showId: "qaytar-dunyo", times: ["17:00", "19:00"] }],
+    "2026-12-02": [{ showId: "usmon-nosir", times: ["18:00"] }],
+    "2026-12-04": [{ showId: "qaynona", times: ["19:00"] }],
+    "2026-12-05": [{ showId: "baxshi", times: ["18:00"] }],
+    "2026-12-06": [{ showId: "otabek-va-kumushbibi", times: ["18:00"] }],
+    "2026-12-10": [{ showId: "xumoy", times: ["18:00"] }],
+    "2026-12-12": [{ showId: "qaynona", times: ["17:00", "19:00"] }],
+    "2026-12-13": [{ showId: "baxshi", times: ["17:00", "19:00"] }],
+    "2026-12-18": [{ showId: "usmon-nosir", times: ["18:00"] }],
+    "2026-12-19": [{ showId: "qaytar-dunyo", times: ["17:00", "19:00"] }],
+    "2026-12-20": [{ showId: "otabek-va-kumushbibi", times: ["18:00"] }]
+  },
+
   /*
     Official Muqimiy Theater Seating Chart (from user's uploaded schematic):
     - Balkon (top): 2 rows, each with 14..10 | 9..8 | 7..6 | 5..1 (14 seats)

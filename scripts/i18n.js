@@ -9,9 +9,11 @@ window.MILLIY_TEATR.translations = {
     nav: {
       home: "Bosh sahifa",
       repertoire: "Repertuar",
+      calendar: "Kalendar",
       actors: "Ijodiy jamoa",
       news: "Yangiliklar",
       tickets: "Chiptalar",
+      myTickets: "Mening chiptalarim",
       buyTicket: "Chipta olish"
     },
     hero: {
@@ -37,7 +39,62 @@ window.MILLIY_TEATR.translations = {
       newsSub: "Rasmiy e'lonlar, xotira kechalari va hamkorlik loyihalari.",
       bookingTag: "Onlayn kassa",
       bookingTitle: "Tomoshabinlar zali sxemasi va bron",
-      bookingSub: "Muqimiy teatrining rasmiy zal sxemasidan o'zingizga qulay o'rinni tanlang."
+      bookingSub: "Muqimiy teatrining rasmiy zal sxemasidan o'zingizga qulay o'rinni tanlang.",
+      calendarTag: "Oylik jadval",
+      calendarTitle: "Interaktiv repertuar kalendari",
+      calendarSub: "Istalgan sanani tanlang va shu kungi spektakllarni ko'rib darhol chipta oling."
+    },
+    calendar: {
+      weekdays: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"],
+      months: { "2026-11": "Noyabr 2026", "2026-12": "Dekabr 2026" },
+      dayOff: "Dam olish kuni",
+      noShow: "Bu kunda spektakl rejalashtirilmagan.",
+      selectDayHint: "Sanani tanlang",
+      showsCount: "ta seans"
+    },
+    seatView: {
+      title: "O'rindan sahnaga ko'rinish",
+      subtitle: "Tanlangan zona yoki o'rindan sahna ko'rinishi",
+      distanceLabel: "Masofa",
+      angleLabel: "Ko'rish burchagi",
+      acousticsLabel: "Akustika",
+      zones: {
+        parter: {
+          name: "Parter (1–6 qatorlar)",
+          distance: "6 – 13 m",
+          angle: "To'g'ri, sahna balandligida",
+          acoustics: "Jonli orkestr bilan maksimal tiniqlik",
+          desc: "Aktyorlarning yuz ifodasi va libos detallari eng yaqin masofadan ko'rinadi."
+        },
+        amphitheater: {
+          name: "Amfiteatr (7–12 qatorlar)",
+          distance: "14 – 21 m",
+          angle: "Biroz balanddan, muvozanatli",
+          acoustics: "Butun zal bo'ylab teng tarqalgan tovush",
+          desc: "Sahnani ham, orkestr chuqurchasini ham to'liq qamrab oladigan eng qulay ko'rinish."
+        },
+        balcony: {
+          name: "Balkon (VIP loja)",
+          distance: "22 – 25 m",
+          angle: "Panoramali yuqori ko'rinish",
+          acoustics: "Keng zal rezonansi",
+          desc: "Butun tomoshabinlar zali va sahna kompozitsiyasini yuqoridan kuzatish uchun ideal."
+        }
+      }
+    },
+    myTickets: {
+      title: "Mening chiptalarim",
+      subtitle: "Bron kodi (masalan, MQ-123456) yoki telefon raqamingiz orqali elektron chiptalaringizni toping.",
+      searchPlaceholder: "Bron kodi yoki telefon raqami...",
+      searchBtn: "Qidirish",
+      showAllBtn: "Barchasi",
+      empty: "Hozircha saqlangan chiptalar topilmadi. Zaldan joy tanlab bron qilganingizdan so'ng chiptangiz shu yerda ko'rinadi.",
+      statusActive: "Faol bron",
+      viewQrBtn: "QR Chiptani ko'rish",
+      cancelBtn: "Bekor qilish",
+      guest: "Tomoshabin",
+      seats: "Joylar",
+      total: "Summa"
     },
     filters: {
       all: "Barchasi",
@@ -91,8 +148,11 @@ window.MILLIY_TEATR.translations = {
       confirmBtn: "Chiptalarni bron qilish",
       clearBtn: "Tozalash",
       successTitle: "Buyurtmangiz qabul qilindi!",
-      successDesc: "Muqimiy teatri kassasi uchun elektron bron kodingiz tayyor. Kodni kirishda ko'rsating.",
+      successDesc: "Muqimiy teatri kassasi uchun elektron QR-chiptangiz tayyor. Kirishda QR-kodni ko'rsating.",
       bookingCode: "Bron kodi",
+      downloadTicket: "Chiptani yuklab olish (PNG)",
+      printTicket: "Chop etish",
+      qrHint: "Teatr nazoratchisiga QR-kodni ko'rsating",
       close: "Yopish",
       validationError: "Iltimos, kamida bitta joy tanlang hamda ism va telefon raqamingizni kiriting."
     },
@@ -114,9 +174,11 @@ window.MILLIY_TEATR.translations = {
     nav: {
       home: "Главная",
       repertoire: "Репертуар",
+      calendar: "Календарь",
       actors: "Труппа",
       news: "Новости",
       tickets: "Билеты",
+      myTickets: "Мои билеты",
       buyTicket: "Купить билет"
     },
     hero: {
@@ -142,7 +204,62 @@ window.MILLIY_TEATR.translations = {
       newsSub: "Официальные объявления, творческие вечера и культурные проекты.",
       bookingTag: "Онлайн-касса",
       bookingTitle: "Схема зрительного зала и бронь",
-      bookingSub: "Выберите удобные места по официальной схеме зала театра Мукими."
+      bookingSub: "Выберите удобные места по официальной схеме зала театра Мукими.",
+      calendarTag: "Расписание на месяц",
+      calendarTitle: "Интерактивный календарь репертуара",
+      calendarSub: "Нажмите на любую дату, чтобы увидеть спектакли и сразу перейти к выбору мест."
+    },
+    calendar: {
+      weekdays: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+      months: { "2026-11": "Ноябрь 2026", "2026-12": "Декабрь 2026" },
+      dayOff: "Выходной день",
+      noShow: "На эту дату спектакли не запланированы.",
+      selectDayHint: "Выберите дату",
+      showsCount: "сеанс(а)"
+    },
+    seatView: {
+      title: "Вид на сцену с места",
+      subtitle: "Перспектива сцены из выбранной зоны или ряда",
+      distanceLabel: "Дистанция",
+      angleLabel: "Ракурс",
+      acousticsLabel: "Акустика",
+      zones: {
+        parter: {
+          name: "Партер (ряды 1–6)",
+          distance: "6 – 13 м",
+          angle: "Прямой, на уровне сцены",
+          acoustics: "Максимальная чёткость живого оркестра",
+          desc: "Мимика актёров и детали костюмов видны с максимально близкого расстояния."
+        },
+        amphitheater: {
+          name: "Амфитеатр (ряды 7–12)",
+          distance: "14 – 21 м",
+          angle: "Лёгкое возвышение, сбалансированный обзор",
+          acoustics: "Равномерное объёмное звучание",
+          desc: "Оптимальный баланс между масштабом всей сцены и комфортной дальностью."
+        },
+        balcony: {
+          name: "Балкон (VIP ложа)",
+          distance: "22 – 25 м",
+          angle: "Панорамный обзор сверху",
+          acoustics: "Полный резонанс зала",
+          desc: "Идеально для созерцания хореографии и общей композиции всего зала."
+        }
+      }
+    },
+    myTickets: {
+      title: "Мои билеты",
+      subtitle: "Найдите свои электронные билеты по коду брони (например, MQ-123456) или номеру телефона.",
+      searchPlaceholder: "Код брони или номер телефона...",
+      searchBtn: "Найти",
+      showAllBtn: "Все",
+      empty: "Сохранённых билетов пока нет. После бронирования мест в зале ваш билет появится здесь.",
+      statusActive: "Активная бронь",
+      viewQrBtn: "Открыть QR-билет",
+      cancelBtn: "Отменить",
+      guest: "Зритель",
+      seats: "Места",
+      total: "Сумма"
     },
     filters: {
       all: "Все",
@@ -196,8 +313,11 @@ window.MILLIY_TEATR.translations = {
       confirmBtn: "Забронировать билеты",
       clearBtn: "Очистить",
       successTitle: "Заказ успешно оформлен!",
-      successDesc: "Ваш электронный код брони для кассы театра Мукими готов. Предъявите его при входе.",
+      successDesc: "Ваш электронный QR-билет для кассы театра Мукими готов. Предъявите QR-код на входе.",
       bookingCode: "Код брони",
+      downloadTicket: "Скачать билет (PNG)",
+      printTicket: "Печать",
+      qrHint: "Покажите этот QR-код контролёру на входе",
       close: "Закрыть",
       validationError: "Пожалуйста, выберите хотя бы одно место и укажите имя с телефоном."
     },
@@ -219,9 +339,11 @@ window.MILLIY_TEATR.translations = {
     nav: {
       home: "Home",
       repertoire: "Repertoire",
+      calendar: "Calendar",
       actors: "Troupe",
       news: "News",
       tickets: "Tickets",
+      myTickets: "My Tickets",
       buyTicket: "Get Tickets"
     },
     hero: {
@@ -247,7 +369,62 @@ window.MILLIY_TEATR.translations = {
       newsSub: "Official announcements, literary evenings, and cultural collaborations.",
       bookingTag: "Online Box Office",
       bookingTitle: "Auditorium Seating Chart & Booking",
-      bookingSub: "Pick your preferred seats directly from the official Muqimiy Theater seating layout."
+      bookingSub: "Pick your preferred seats directly from the official Muqimiy Theater seating layout.",
+      calendarTag: "Monthly Schedule",
+      calendarTitle: "Interactive Repertoire Calendar",
+      calendarSub: "Click any date to inspect scheduled performances and jump straight to seat selection."
+    },
+    calendar: {
+      weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+      months: { "2026-11": "November 2026", "2026-12": "December 2026" },
+      dayOff: "Day Off (Closed)",
+      noShow: "No performances scheduled on this date.",
+      selectDayHint: "Select a date",
+      showsCount: "show(s)"
+    },
+    seatView: {
+      title: "View from Seat",
+      subtitle: "Stage perspective from the selected zone or row",
+      distanceLabel: "Distance",
+      angleLabel: "Viewing Angle",
+      acousticsLabel: "Acoustics",
+      zones: {
+        parter: {
+          name: "Parter (Rows 1–6)",
+          distance: "6 – 13 m",
+          angle: "Direct, stage eye-level",
+          acoustics: "Peak clarity with live orchestra",
+          desc: "Closest possible proximity to performers' expressions and costume details."
+        },
+        amphitheater: {
+          name: "Amphitheater (Rows 7–12)",
+          distance: "14 – 21 m",
+          angle: "Gently elevated, balanced view",
+          acoustics: "Even full-hall surround balance",
+          desc: "Ideal panoramic balance capturing both the entire stage and orchestra pit."
+        },
+        balcony: {
+          name: "Balcony (VIP Loge)",
+          distance: "22 – 25 m",
+          angle: "Elevated architectural panorama",
+          acoustics: "Rich hall resonance",
+          desc: "Best vantage point for full stage choreography and grand auditorium framing."
+        }
+      }
+    },
+    myTickets: {
+      title: "My Tickets",
+      subtitle: "Look up your e-tickets by booking code (e.g., MQ-123456) or phone number.",
+      searchPlaceholder: "Booking code or phone number...",
+      searchBtn: "Search",
+      showAllBtn: "Show All",
+      empty: "No saved tickets yet. Once you reserve seats, your QR e-ticket will appear here.",
+      statusActive: "Active Booking",
+      viewQrBtn: "View QR Ticket",
+      cancelBtn: "Cancel Booking",
+      guest: "Guest",
+      seats: "Seats",
+      total: "Total"
     },
     filters: {
       all: "All",
@@ -301,8 +478,11 @@ window.MILLIY_TEATR.translations = {
       confirmBtn: "Confirm Reservation",
       clearBtn: "Clear",
       successTitle: "Reservation Confirmed!",
-      successDesc: "Your e-ticket reservation code for Muqimiy Theater is ready. Present it at the entrance.",
+      successDesc: "Your QR e-ticket for Muqimiy Theater is ready. Present the QR code at the entrance.",
       bookingCode: "Booking Code",
+      downloadTicket: "Download Ticket (PNG)",
+      printTicket: "Print",
+      qrHint: "Show this QR code to the theater usher at entry",
       close: "Close",
       validationError: "Please select at least one seat and enter your name and phone number."
     },

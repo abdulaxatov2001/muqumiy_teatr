@@ -1,8 +1,9 @@
 (function () {
-  const { translations, data } = window.MILLIY_TEATR;
+  const { translations, data, QRCode } = window.MILLIY_TEATR;
 
   const STORAGE_LANG_KEY = "muqimiy_lang";
   const STORAGE_BOOKINGS_KEY = "muqimiy_bookings";
+  const STORAGE_ORDERS_KEY = "muqimiy_orders";
 
   function loadSavedLang() {
     try {
@@ -30,6 +31,16 @@
     }
   }
 
+  function loadSavedOrders() {
+    try {
+      const raw = localStorage.getItem(STORAGE_ORDERS_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
   function persistBookings() {
     try {
       const serializable = {};
@@ -38,7 +49,15 @@
       });
       localStorage.setItem(STORAGE_BOOKINGS_KEY, JSON.stringify(serializable));
     } catch {
-      // ignore storage quota/privacy errors
+      // ignore storage errors
+    }
+  }
+
+  function persistOrders() {
+    try {
+      localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(state.orders));
+    } catch {
+      // ignore storage errors
     }
   }
 
@@ -46,10 +65,15 @@
     lang: loadSavedLang(),
     filter: "all",
     search: "",
+    calendarMonth: "2026-11",
+    selectedDate: "2026-11-28",
+    activeSeatViewZone: "parter",
     selectedShowId: data.productions[0].id,
     selectedSessionId: data.productions[0].sessions[0].id,
-    selectedSeats: [], // { key, zoneKey, rowLabel, seat, price }
-    bookedBySession: loadSavedBookings()
+    selectedSeats: [], // { key, zone, zoneKey, rowLabel, seat, price }
+    bookedBySession: loadSavedBookings(),
+    orders: loadSavedOrders(),
+    ticketSearchQuery: ""
   };
 
   function t(path) {
@@ -73,7 +97,8 @@
     document.documentElement.lang = state.lang;
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
-      el.textContent = t(key);
+      const val = t(key);
+      if (typeof val === "string") el.textContent = val;
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
       const key = el.getAttribute("data-i18n-placeholder");
@@ -84,6 +109,12 @@
     document.getElementById("heroPremiereTitle").textContent = featured.title[state.lang];
     document.getElementById("heroPremiereMeta").textContent =
       `${featured.sessions[0].label[state.lang]} · ${t("production.mainHall")}`;
+
+    // Update calendar month pills
+    document.querySelectorAll("#calendarMonthSwitcher button").forEach((btn) => {
+      const m = btn.getAttribute("data-month");
+      btn.textContent = t(`calendar.months.${m}`);
+    });
   }
 
   function renderProductions() {
@@ -144,6 +175,109 @@
       .join("");
   }
 
+  /* Interactive Monthly Calendar */
+  function renderCalendar() {
+    const weekdaysEl = document.getElementById("calendarWeekdays");
+    const daysEl = document.getElementById("calendarDays");
+    const weekdays = t("calendar.weekdays");
+    weekdaysEl.innerHTML = weekdays.map((d) => `<span>${d}</span>`).join("");
+
+    const [year, month] = state.calendarMonth.split("-").map(Number);
+    const firstDayJs = new Date(year, month - 1, 1).getDay(); // 0=Sun..6=Sat
+    const startOffset = (firstDayJs + 6) % 7; // Mon=0..Sun=6
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    let html = "";
+    for (let i = 0; i < startOffset; i++) {
+      html += `<div class="cal-day empty"></div>`;
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const mm = String(month).padStart(2, "0");
+      const dd = String(day).padStart(2, "0");
+      const dateStr = `${year}-${mm}-${dd}`;
+      const dow = new Date(year, month - 1, day).getDay(); // 2 = Tuesday (day off)
+      const entries = data.calendarSchedule[dateStr] || [];
+      const isSelected = state.selectedDate === dateStr;
+      const isDayOff = dow === 2 && entries.length === 0;
+
+      const classes = ["cal-day"];
+      if (entries.length > 0) classes.push("has-show");
+      if (isDayOff) classes.push("day-off");
+      if (isSelected) classes.push("selected");
+
+      let dotText = "";
+      if (entries.length > 0) {
+        const show = data.productions.find((p) => p.id === entries[0].showId);
+        dotText = show ? show.title[state.lang] : "";
+      } else if (isDayOff) {
+        dotText = "×";
+      }
+
+      html += `
+        <button type="button" class="${classes.join(" ")}" data-date="${dateStr}">
+          <span class="cal-day-num">${day}</span>
+          ${dotText ? `<span class="cal-day-dot">${dotText}</span>` : ""}
+        </button>
+      `;
+    }
+
+    daysEl.innerHTML = html;
+    renderCalendarDetail();
+  }
+
+  function renderCalendarDetail() {
+    const detailEl = document.getElementById("calendarDetail");
+    const dateStr = state.selectedDate;
+    const entries = data.calendarSchedule[dateStr] || [];
+    const dateObj = new Date(dateStr + "T12:00:00");
+    const isTuesday = dateObj.getDay() === 2;
+    const monthLabel = t(`calendar.months.${dateStr.slice(0, 7)}`);
+    const dayNum = Number(dateStr.slice(8, 10));
+
+    if (entries.length === 0) {
+      detailEl.innerHTML = `
+        <div class="cal-detail-date">${dayNum} · ${monthLabel}</div>
+        <h3 style="font-family:var(--font-display); font-size:1.6rem; margin-bottom:0.5rem;">
+          ${isTuesday ? t("calendar.dayOff") : t("calendar.selectDayHint")}
+        </h3>
+        <p style="color:var(--ink-muted); font-size:0.9rem;">${t("calendar.noShow")}</p>
+      `;
+      return;
+    }
+
+    const itemsHtml = entries
+      .map((entry) => {
+        const show = data.productions.find((p) => p.id === entry.showId);
+        if (!show) return "";
+        const timesHtml = entry.times.map((tm) => `<span class="cal-time-pill">${tm}</span>`).join("");
+        return `
+          <div class="cal-detail-item">
+            <h4>${show.title[state.lang]}</h4>
+            <p style="font-size:0.85rem; color:var(--ink-muted); margin-bottom:0.5rem;">
+              ${show.author[state.lang]} · ${show.duration}
+            </p>
+            <div class="cal-time-pills">${timesHtml}</div>
+            <p style="font-size:0.86rem; color:var(--ink-muted); margin-bottom:1rem;">${show.synopsis[state.lang]}</p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-sm" data-cal-book="${show.id}">
+                ${t("production.bookBtn")}
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" data-cal-details="${show.id}">
+                ${t("production.detailsBtn")}
+              </button>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+
+    detailEl.innerHTML = `
+      <div class="cal-detail-date">${dayNum} · ${monthLabel}</div>
+      ${itemsHtml}
+    `;
+  }
+
   function renderActors() {
     const grid = document.getElementById("actorsGrid");
     grid.innerHTML = data.actors
@@ -202,6 +336,73 @@
       <h2 class="modal-title">${item.title[state.lang]}</h2>
       <p style="color: var(--ink-muted); line-height: 1.7; margin-top: 0.75rem;">${item.summary[state.lang]}</p>
     `);
+  }
+
+  /* View from Seat Perspective Renderer */
+  function renderSeatView() {
+    const zone = state.activeSeatViewZone;
+    const zoneInfo = t(`seatView.zones.${zone}`);
+    document.getElementById("seatViewZoneName").textContent = zoneInfo.name;
+    document.getElementById("seatViewDesc").textContent = zoneInfo.desc;
+
+    document.querySelectorAll("#seatViewTabs .sv-tab").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-zone") === zone);
+    });
+
+    document.getElementById("seatViewMetrics").innerHTML = `
+      <div class="sv-metric">
+        <span>${t("seatView.distanceLabel")}</span>
+        <strong>${zoneInfo.distance}</strong>
+      </div>
+      <div class="sv-metric">
+        <span>${t("seatView.angleLabel")}</span>
+        <strong>${zoneInfo.angle}</strong>
+      </div>
+      <div class="sv-metric">
+        <span>${t("seatView.acousticsLabel")}</span>
+        <strong>${zoneInfo.acoustics}</strong>
+      </div>
+    `;
+
+    // Architectural SVG stage perspective adjusted per zone
+    const configs = {
+      parter: { stageW: 260, stageH: 108, stageY: 22, pitH: 14, balconyRim: false, scaleText: "100%" },
+      amphitheater: { stageW: 210, stageH: 88, stageY: 32, pitH: 18, balconyRim: false, scaleText: "82%" },
+      balcony: { stageW: 164, stageH: 70, stageY: 28, pitH: 20, balconyRim: true, scaleText: "65%" }
+    };
+    const cfg = configs[zone] || configs.parter;
+    const sx = (320 - cfg.stageW) / 2;
+
+    document.getElementById("seatViewSvgWrap").innerHTML = `
+      <svg viewBox="0 0 320 155" width="100%" style="display:block;" aria-label="${zoneInfo.name}">
+        <defs>
+          <radialGradient id="stageGlow" cx="50%" cy="45%" r="60%">
+            <stop offset="0%" stop-color="#FDE68A" stop-opacity="0.95"/>
+            <stop offset="55%" stop-color="#D97706" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#1C1917" stop-opacity="0.98"/>
+          </radialGradient>
+        </defs>
+        <rect width="320" height="155" fill="#18181B"/>
+        <!-- Auditorium side walls -->
+        <polygon points="0,0 ${sx},${cfg.stageY} ${sx},${cfg.stageY + cfg.stageH} 0,155" fill="#27272A"/>
+        <polygon points="320,0 ${sx + cfg.stageW},${cfg.stageY} ${sx + cfg.stageW},${cfg.stageY + cfg.stageH} 320,155" fill="#27272A"/>
+        <!-- Stage Opening -->
+        <rect x="${sx}" y="${cfg.stageY}" width="${cfg.stageW}" height="${cfg.stageH}" rx="4" fill="url(#stageGlow)"/>
+        <!-- Curtains -->
+        <path d="M${sx},${cfg.stageY} Q${sx + 26},${cfg.stageY + cfg.stageH * 0.55} ${sx + 14},${cfg.stageY + cfg.stageH} L${sx},${cfg.stageY + cfg.stageH} Z" fill="#8C2E21"/>
+        <path d="M${sx + cfg.stageW},${cfg.stageY} Q${sx + cfg.stageW - 26},${cfg.stageY + cfg.stageH * 0.55} ${sx + cfg.stageW - 14},${cfg.stageY + cfg.stageH} L${sx + cfg.stageW},${cfg.stageY + cfg.stageH} Z" fill="#8C2E21"/>
+        <rect x="${sx}" y="${cfg.stageY}" width="${cfg.stageW}" height="10" fill="#A63A2B"/>
+        <!-- Performer silhouettes on stage -->
+        <circle cx="148" cy="${cfg.stageY + cfg.stageH * 0.62}" r="${zone === 'parter' ? 6 : 4}" fill="#18181B"/>
+        <path d="M141,${cfg.stageY + cfg.stageH - 6} L148,${cfg.stageY + cfg.stageH * 0.68} L155,${cfg.stageY + cfg.stageH - 6} Z" fill="#18181B"/>
+        <circle cx="174" cy="${cfg.stageY + cfg.stageH * 0.64}" r="${zone === 'parter' ? 5.5 : 3.8}" fill="#18181B"/>
+        <path d="M167,${cfg.stageY + cfg.stageH - 6} L174,${cfg.stageY + cfg.stageH * 0.7} L181,${cfg.stageY + cfg.stageH - 6} Z" fill="#18181B"/>
+        <!-- Stage Floor / Orchestra Pit -->
+        <rect x="${sx - 8}" y="${cfg.stageY + cfg.stageH}" width="${cfg.stageW + 16}" height="${cfg.pitH}" fill="#3F2E21"/>
+        ${cfg.balconyRim ? `<path d="M0,126 Q160,114 320,126 L320,155 L0,155 Z" fill="#292524" stroke="#57534E" stroke-width="1"/>` : `<path d="M20,142 Q160,132 300,142 L320,155 L0,155 Z" fill="#27272A"/>`}
+        <text x="160" y="14" text-anchor="middle" fill="#D4D4D8" font-size="8.5" font-family="sans-serif" letter-spacing="1.5">${t("booking.stage")} · ${cfg.scaleText}</text>
+      </svg>
+    `;
   }
 
   function populateBookingSelectors() {
@@ -266,6 +467,7 @@
                         type="button"
                         class="${classes.join(" ")}"
                         data-seat-key="${seatKey}"
+                        data-zone="${zone.zone}"
                         data-zone-key="${zone.labelKey}"
                         data-row-label="${rowObj.rowLabel}"
                         data-seat="${seatNum}"
@@ -328,6 +530,141 @@
 
     const total = state.selectedSeats.reduce((sum, s) => sum + s.price, 0);
     totalEl.textContent = formatPrice(total);
+  }
+
+  function formatOrderSeats(order) {
+    return order.seats
+      .map((s) => `${t(`booking.${s.zoneKey}`)} (${t("booking.row")} ${s.rowLabel}, ${t("booking.seat")} ${s.seat})`)
+      .join(", ");
+  }
+
+  function getOrderQrPayload(order) {
+    return `${order.code}|${order.showId}|${order.sessionId}|${order.seats.map((s) => s.key).join(",")}`;
+  }
+
+  function openTicketQrModal(order, isNewBooking = false) {
+    const show = data.productions.find((p) => p.id === order.showId) || data.productions[0];
+    const session = show.sessions.find((s) => s.id === order.sessionId) || show.sessions[0];
+    const seatSummary = formatOrderSeats(order);
+    const qrPayload = getOrderQrPayload(order);
+
+    openModal(`
+      <div class="success-box">
+        ${isNewBooking ? `<div class="success-icon">✓</div>` : ""}
+        <h2 class="modal-title">${isNewBooking ? t("booking.successTitle") : show.title[state.lang]}</h2>
+        <p style="color: var(--ink-muted); margin-bottom: 0.75rem;">
+          ${isNewBooking ? t("booking.successDesc") : session.label[state.lang]}
+        </p>
+
+        <div class="qr-modal-box">
+          <canvas id="modalQrCanvas"></canvas>
+          <span>${t("booking.qrHint")}</span>
+        </div>
+
+        <div class="booking-code-pill">${t("booking.bookingCode")}: ${order.code}</div>
+
+        <div style="text-align: left; background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin: 0.75rem 0 1.25rem;">
+          <div><strong>${show.title[state.lang]}</strong> — ${session.label[state.lang]}</div>
+          <div style="margin-top: 0.35rem; color: var(--ink-muted);">${seatSummary}</div>
+          <div style="margin-top: 0.35rem; color: var(--ink-muted);">${order.customerName} (${order.customerPhone})</div>
+          <div style="margin-top: 0.5rem;"><strong>${t("booking.total")}:</strong> ${formatPrice(order.total)}</div>
+        </div>
+
+        <div style="display:flex; gap:0.65rem; justify-content:center; flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary btn-sm" id="downloadTicketBtn">${t("booking.downloadTicket")}</button>
+          <button type="button" class="btn btn-outline btn-sm" id="printTicketBtn">${t("booking.printTicket")}</button>
+          <button type="button" class="btn btn-outline btn-sm" id="successCloseBtn">${t("booking.close")}</button>
+        </div>
+      </div>
+    `);
+
+    const qrCanvas = document.getElementById("modalQrCanvas");
+    if (qrCanvas && QRCode) {
+      QRCode.renderToCanvas(qrCanvas, qrPayload, { scale: 5, quiet: 2 });
+    }
+
+    document.getElementById("downloadTicketBtn").addEventListener("click", () => {
+      QRCode.downloadTicketPng({
+        code: order.code,
+        showTitle: show.title[state.lang],
+        sessionLabel: session.label[state.lang],
+        hallLabel: t("production.mainHall"),
+        seatSummary,
+        customerName: order.customerName,
+        customerPhone: order.customerPhone,
+        totalFormatted: formatPrice(order.total),
+        qrPayload,
+        labels: {
+          seats: t("myTickets.seats"),
+          guest: t("myTickets.guest"),
+          total: t("myTickets.total"),
+          code: t("booking.bookingCode")
+        }
+      });
+    });
+
+    document.getElementById("printTicketBtn").addEventListener("click", () => window.print());
+    document.getElementById("successCloseBtn").addEventListener("click", closeModal);
+  }
+
+  /* My Tickets Lookup & Rendering */
+  function renderMyTickets() {
+    const grid = document.getElementById("myTicketsGrid");
+    const q = state.ticketSearchQuery.trim().toLowerCase();
+
+    const list = state.orders.filter((o) => {
+      if (!q) return true;
+      return (
+        o.code.toLowerCase().includes(q) ||
+        o.customerPhone.toLowerCase().includes(q) ||
+        o.customerName.toLowerCase().includes(q)
+      );
+    });
+
+    if (list.length === 0) {
+      grid.innerHTML = `<div class="empty-seats-msg" style="grid-column: 1 / -1;">${t("myTickets.empty")}</div>`;
+      return;
+    }
+
+    grid.innerHTML = list
+      .map((order) => {
+        const show = data.productions.find((p) => p.id === order.showId) || data.productions[0];
+        const session = show.sessions.find((s) => s.id === order.sessionId) || show.sessions[0];
+        return `
+          <article class="ticket-card">
+            <div class="ticket-qr-thumb">
+              <canvas data-ticket-qr="${order.code}"></canvas>
+            </div>
+            <div class="ticket-info">
+              <div class="ticket-top-row">
+                <span class="ticket-code-badge">${order.code}</span>
+                <span class="ticket-status-badge">${t("myTickets.statusActive")}</span>
+              </div>
+              <h4>${show.title[state.lang]}</h4>
+              <div class="ticket-meta-line">${session.label[state.lang]}</div>
+              <div class="ticket-meta-line"><strong>${t("myTickets.seats")}:</strong> ${formatOrderSeats(order)}</div>
+              <div class="ticket-meta-line"><strong>${t("myTickets.total")}:</strong> ${formatPrice(order.total)}</div>
+              <div class="ticket-actions">
+                <button type="button" class="btn btn-primary btn-sm" data-view-ticket="${order.code}">
+                  ${t("myTickets.viewQrBtn")}
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" data-cancel-ticket="${order.code}">
+                  ${t("myTickets.cancelBtn")}
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+
+    // Render small QR canvases for each ticket card
+    list.forEach((order) => {
+      const canvas = grid.querySelector(`canvas[data-ticket-qr="${order.code}"]`);
+      if (canvas && QRCode) {
+        QRCode.renderToCanvas(canvas, getOrderQrPayload(order), { scale: 3, quiet: 1 });
+      }
+    });
   }
 
   function openModal(html) {
@@ -409,11 +746,14 @@
         btn.classList.add("active");
         applyI18n();
         renderProductions();
+        renderCalendar();
         renderActors();
         renderNews();
         populateBookingSelectors();
         renderSeatMap();
+        renderSeatView();
         renderBookingSummary();
+        renderMyTickets();
       });
     });
 
@@ -438,6 +778,39 @@
     document.getElementById("searchInput").addEventListener("input", (e) => {
       state.search = e.target.value;
       renderProductions();
+    });
+
+    // Calendar events
+    document.getElementById("calendarMonthSwitcher").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-month]");
+      if (!btn) return;
+      state.calendarMonth = btn.getAttribute("data-month");
+      document.querySelectorAll("#calendarMonthSwitcher button").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.selectedDate = state.calendarMonth === "2026-11" ? "2026-11-28" : "2026-12-05";
+      renderCalendar();
+    });
+
+    document.getElementById("calendarDays").addEventListener("click", (e) => {
+      const btn = e.target.closest(".cal-day[data-date]");
+      if (!btn) return;
+      state.selectedDate = btn.getAttribute("data-date");
+      renderCalendar();
+    });
+
+    document.getElementById("calendarDetail").addEventListener("click", (e) => {
+      const bookBtn = e.target.closest("button[data-cal-book]");
+      const detBtn = e.target.closest("button[data-cal-details]");
+      if (bookBtn) selectShowForBooking(bookBtn.getAttribute("data-cal-book"));
+      if (detBtn) openProductionModal(detBtn.getAttribute("data-cal-details"));
+    });
+
+    // View from Seat tabs
+    document.getElementById("seatViewTabs").addEventListener("click", (e) => {
+      const tab = e.target.closest(".sv-tab[data-zone]");
+      if (!tab) return;
+      state.activeSeatViewZone = tab.getAttribute("data-zone");
+      renderSeatView();
     });
 
     document.getElementById("newsGrid").addEventListener("click", (e) => {
@@ -488,6 +861,7 @@
       const btn = e.target.closest(".seat-btn");
       if (!btn || btn.disabled) return;
       const key = btn.getAttribute("data-seat-key");
+      const zone = btn.getAttribute("data-zone");
       const existingIdx = state.selectedSeats.findIndex((s) => s.key === key);
 
       if (existingIdx >= 0) {
@@ -495,11 +869,14 @@
       } else {
         state.selectedSeats.push({
           key,
+          zone,
           zoneKey: btn.getAttribute("data-zone-key"),
           rowLabel: btn.getAttribute("data-row-label"),
           seat: Number(btn.getAttribute("data-seat")),
           price: Number(btn.getAttribute("data-price"))
         });
+        state.activeSeatViewZone = zone;
+        renderSeatView();
       }
       renderSeatMap();
       renderBookingSummary();
@@ -524,6 +901,7 @@
       e.preventDefault();
       const name = document.getElementById("customerName").value.trim();
       const phone = document.getElementById("customerPhone").value.trim();
+      const email = document.getElementById("customerEmail").value.trim();
       const errorEl = document.getElementById("bookingError");
 
       if (state.selectedSeats.length === 0 || !name || !phone) {
@@ -539,35 +917,71 @@
       state.selectedSeats.forEach((s) => state.bookedBySession[state.selectedSessionId].add(s.key));
       persistBookings();
 
-      const show = data.productions.find((p) => p.id === state.selectedShowId);
-      const session = show.sessions.find((s) => s.id === state.selectedSessionId);
       const total = state.selectedSeats.reduce((sum, s) => sum + s.price, 0);
       const bookingCode = "MQ-" + Math.floor(100000 + Math.random() * 900000);
-      const seatSummary = state.selectedSeats
-        .map((s) => `${t(`booking.${s.zoneKey}`)} (${t("booking.row")} ${s.rowLabel}, ${t("booking.seat")} ${s.seat})`)
-        .join(", ");
 
-      openModal(`
-        <div class="success-box">
-          <div class="success-icon">✓</div>
-          <h2 class="modal-title">${t("booking.successTitle")}</h2>
-          <p style="color: var(--ink-muted); margin-bottom: 1rem;">${t("booking.successDesc")}</p>
-          <div class="booking-code-pill">${t("booking.bookingCode")}: ${bookingCode}</div>
-          <div style="text-align: left; background: var(--bg); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; margin: 1rem 0 1.5rem;">
-            <div><strong>${show.title[state.lang]}</strong> — ${session.label[state.lang]}</div>
-            <div style="margin-top: 0.35rem; color: var(--ink-muted);">${seatSummary}</div>
-            <div style="margin-top: 0.5rem;"><strong>${t("booking.total")}:</strong> ${formatPrice(total)}</div>
-          </div>
-          <button type="button" class="btn btn-primary" id="successCloseBtn">${t("booking.close")}</button>
-        </div>
-      `);
+      const newOrder = {
+        code: bookingCode,
+        showId: state.selectedShowId,
+        sessionId: state.selectedSessionId,
+        seats: state.selectedSeats.map((s) => ({ ...s })),
+        total,
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: email,
+        createdAt: new Date().toISOString()
+      };
 
-      document.getElementById("successCloseBtn").addEventListener("click", closeModal);
+      state.orders.unshift(newOrder);
+      persistOrders();
+      renderMyTickets();
+
+      openTicketQrModal(newOrder, true);
 
       state.selectedSeats = [];
       e.target.reset();
       renderSeatMap();
       renderBookingSummary();
+    });
+
+    // My Tickets Search & Actions
+    document.getElementById("ticketSearchForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      state.ticketSearchQuery = document.getElementById("ticketSearchInput").value;
+      renderMyTickets();
+    });
+
+    document.getElementById("ticketShowAllBtn").addEventListener("click", () => {
+      state.ticketSearchQuery = "";
+      document.getElementById("ticketSearchInput").value = "";
+      renderMyTickets();
+    });
+
+    document.getElementById("myTicketsGrid").addEventListener("click", (e) => {
+      const viewBtn = e.target.closest("button[data-view-ticket]");
+      const cancelBtn = e.target.closest("button[data-cancel-ticket]");
+
+      if (viewBtn) {
+        const code = viewBtn.getAttribute("data-view-ticket");
+        const order = state.orders.find((o) => o.code === code);
+        if (order) openTicketQrModal(order, false);
+      } else if (cancelBtn) {
+        const code = cancelBtn.getAttribute("data-cancel-ticket");
+        const order = state.orders.find((o) => o.code === code);
+        if (!order) return;
+
+        // Free up seats in bookedBySession
+        const sessionSet = state.bookedBySession[order.sessionId];
+        if (sessionSet) {
+          order.seats.forEach((s) => sessionSet.delete(s.key));
+          persistBookings();
+        }
+
+        state.orders = state.orders.filter((o) => o.code !== code);
+        persistOrders();
+        renderSeatMap();
+        renderMyTickets();
+      }
     });
 
     document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
@@ -582,11 +996,14 @@
   function init() {
     applyI18n();
     renderProductions();
+    renderCalendar();
     renderActors();
     renderNews();
     populateBookingSelectors();
     renderSeatMap();
+    renderSeatView();
     renderBookingSummary();
+    renderMyTickets();
     bindEvents();
   }
 
