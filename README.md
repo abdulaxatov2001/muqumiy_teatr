@@ -24,6 +24,22 @@
 └── images/             # Teatr va spektakllar rasmlari
 ```
 
+## Ijodkorlar rasmlarini qo'shish
+
+1. Rasmni `images/team/` papkasiga ijodkor `id`si nomi bilan saqlang, masalan `images/team/fotih-jalolov.jpg`.
+   Tavsiya: vertikal portret (4:5), kamida 800×1000 px, hajmi 300 KB dan kichik.
+2. `scripts/data.js` da shu ijodkorga `photo` maydonini qo'shing:
+
+```js
+{
+  id: "fotih-jalolov",
+  photo: "images/team/fotih-jalolov.jpg",
+  ...
+}
+```
+
+Rasm qo'shilmagan yoki topilmagan bo'lsa, kartochkada avtomatik ravishda bosh harflar bilan rangli portret chiqadi.
+
 ## Ishga tushirish
 
 `index.html` faylini istalgan brauzerda oching yoki lokal server orqali ishga tushiring:

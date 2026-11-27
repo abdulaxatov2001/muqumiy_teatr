@@ -281,6 +281,20 @@
     `;
   }
 
+  /* VAQTINCHALIK TEST: rasmi yo'q barcha ijodkorlarga shu rasm qo'yiladi.
+     Haqiqiy rasmlar qo'shilgach "" qiling yoki bu qatorni o'chiring. */
+  const TEST_TEAM_PHOTO = "images/team/placeholder.svg";
+
+  /* Ijodkor portreti: actor.photo bo'lsa rasm, bo'lmasa bosh harflar bilan zaxira portret */
+  function memberPortrait(actor, cls) {
+    const initials = `<span class="portrait-initials">${actor.initials}</span>`;
+    const photo = actor.photo || TEST_TEAM_PHOTO;
+    const img = photo
+      ? `<img src="${photo}" alt="${actor.name[state.lang]}" loading="lazy" onerror="this.remove()" />`
+      : "";
+    return `<div class="${cls} portrait" style="--accent-c: ${actor.accent};">${initials}${img}</div>`;
+  }
+
   function renderActors() {
     const grid = document.getElementById("actorsGrid");
     const q = state.teamSearch.trim().toLowerCase();
@@ -304,22 +318,15 @@
         (actor) => {
           const categoryBadge = t(`teamFilters.${actor.category}`);
           return `
-          <article class="actor-card" data-member-id="${actor.id}">
-            <div class="actor-card-badge">${categoryBadge}</div>
-            <div class="actor-top">
-              <div class="actor-avatar" style="background: ${actor.accent};">${actor.initials}</div>
-              <div>
-                <h3 class="actor-name">${actor.name[state.lang]}</h3>
-                <div class="actor-role-title">${actor.title[state.lang]}</div>
-              </div>
-            </div>
-            <p class="actor-bio">${actor.bio[state.lang]}</p>
-            <div class="actor-meta">
-              <strong>${t("teamMember.rolesOrWorks")}:</strong> ${actor.roles[state.lang]}
-            </div>
-            <div class="actor-card-footer">
-              <button type="button" class="btn btn-outline btn-sm" data-action="member-details" data-id="${actor.id}">
-                ${t("teamMember.detailsBtn")}
+          <article class="actor-card" data-member-id="${actor.id}" tabindex="0">
+            ${memberPortrait(actor, "actor-photo")}
+            <div class="actor-body">
+              <span class="actor-card-badge">${categoryBadge}</span>
+              <h3 class="actor-name">${actor.name[state.lang]}</h3>
+              <div class="actor-role-title">${actor.title[state.lang]}</div>
+              <div class="actor-meta">${actor.roles[state.lang]}</div>
+              <button type="button" class="actor-more" data-action="member-details" data-id="${actor.id}">
+                ${t("teamMember.detailsBtn")} →
               </button>
             </div>
           </article>
@@ -340,7 +347,7 @@
 
     openModal(`
       <div class="modal-member-head">
-        <div class="actor-avatar" style="background:${item.accent}; width:72px; height:72px; font-size:1.75rem; flex-shrink:0;">${item.initials}</div>
+        ${memberPortrait(item, "modal-portrait")}
         <div>
           <span class="ticket-status-badge" style="margin-bottom:0.35rem; display:inline-block;">${categoryBadge}</span>
           <h2 class="modal-title" style="margin-bottom:0.25rem;">${item.name[state.lang]}</h2>

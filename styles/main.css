@@ -89,6 +89,11 @@ a {
   display: flex;
   align-items: center;
   gap: 0.85rem;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  flex-shrink: 0;
 }
 
 .brand-mark {
@@ -113,17 +118,42 @@ a {
   line-height: 1.1;
 }
 
+.brand-text strong {
+  white-space: nowrap;
+}
+
 .brand-text span {
   display: block;
+  max-width: 17rem;
   font-size: 0.72rem;
   color: var(--ink-soft);
   letter-spacing: 0.02em;
+}
+
+/* Menyu to'liq ko'rinadigan rejimda logotip ostidagi uzun yozuv yashiriladi (joy yetmaydi) */
+@media (min-width: 1361px) {
+  .brand-text span {
+    display: none;
+  }
+
+  .nav-links {
+    gap: 1.15rem;
+  }
+
+  .header-inner {
+    gap: 1rem;
+  }
 }
 
 .nav-links {
   display: flex;
   align-items: center;
   gap: 1.75rem;
+}
+
+.nav-links a,
+.header-actions .btn {
+  white-space: nowrap;
 }
 
 .nav-links a {
@@ -571,108 +601,145 @@ a {
 /* Actors Grid */
 .actors-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
 .actor-card {
   position: relative;
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 1.5rem;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   cursor: pointer;
 }
 
-.actor-card:hover {
+.actor-card:hover,
+.actor-card:focus-visible {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
   border-color: var(--accent);
+  outline: none;
+}
+
+/* Portret: rasm yoki bosh harflar */
+.portrait {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0 10px, transparent 10px 22px),
+    var(--accent-c, var(--accent));
+  display: grid;
+  place-items: center;
+}
+
+.portrait img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portrait-initials {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.02em;
+}
+
+.actor-photo {
+  aspect-ratio: 4 / 5;
+}
+
+.actor-photo .portrait-initials {
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+}
+
+.actor-card:hover .actor-photo img {
+  transform: scale(1.04);
+}
+
+.actor-body {
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
 }
 
 .actor-card-badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 0.68rem;
+  align-self: flex-start;
+  font-size: 0.7rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--ink-soft);
-  padding: 0.22rem 0.6rem;
-  border-radius: 999px;
-  transition: all var(--transition);
-}
-
-.actor-card:hover .actor-card-badge {
-  border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-soft);
-}
-
-.actor-top {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-right: 5rem;
-}
-
-.actor-avatar {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 700;
-  flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  margin-bottom: 0.2rem;
 }
 
 .actor-name {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.12;
 }
 
 .actor-role-title {
   font-size: 0.82rem;
-  color: var(--accent);
-  font-weight: 600;
-  margin-top: 0.15rem;
-}
-
-.actor-bio {
-  font-size: 0.86rem;
   color: var(--ink-muted);
+  font-weight: 600;
+  line-height: 1.4;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.5;
 }
 
 .actor-meta {
-  margin-top: auto;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
   font-size: 0.8rem;
   color: var(--ink-soft);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.actor-card-footer {
-  margin-top: 0.5rem;
-  display: flex;
-  justify-content: flex-end;
+.actor-more {
+  margin-top: auto;
+  padding-top: 0.6rem;
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding-left: 0;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.actor-more:hover {
+  text-decoration: underline;
+}
+
+.modal-portrait {
+  width: 96px;
+  height: 120px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.modal-portrait .portrait-initials {
+  font-size: 2rem;
 }
 
 /* News Grid */
@@ -1665,7 +1732,7 @@ body.modal-open {
 }
 
 /* Responsive */
-@media (max-width: 1100px) {
+@media (max-width: 1360px) {
   .nav-links {
     display: none;
     position: absolute;
@@ -1717,9 +1784,12 @@ body.modal-open {
   }
 
   .cards-grid,
-  .actors-grid,
   .news-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .actors-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .tickets-grid {
@@ -1769,11 +1839,27 @@ body.modal-open {
   }
 
   .cards-grid,
-  .actors-grid,
   .news-grid,
   .booking-controls,
   .footer-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .actors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .actor-body {
+    padding: 0.8rem 0.8rem 0.9rem;
+  }
+
+  .actor-name {
+    font-size: 1.12rem;
+  }
+
+  .actor-meta {
+    display: none;
   }
 
   .seat-map-panel {
